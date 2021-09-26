@@ -1,0 +1,18 @@
+@charset "ISO-8859-1";
+body {
+  background-image: url("Online_Shoping.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh; /*Tamaño de largo relativo a la pantalla*/
+  max-width: 100%;
+  opacity: 0.9;
+}
+.container {
+  opacity: 1;
+  max-width: 50%;
+}
+
+.container-fluid {
+  color: #00251a !important;
+}
