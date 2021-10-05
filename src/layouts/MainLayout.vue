@@ -38,16 +38,15 @@
 
       </q-list>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+
 
 const linksList = [
   {
@@ -68,6 +67,12 @@ const linksList = [
     icon: 'local_shipping',
     link: '/proveedores'
   },
+  {
+    title: 'Productos',
+    caption: 'Productos',
+    icon: 'inventory_2',
+    link: '/productos'
+  },
 
 ];
 
@@ -77,7 +82,8 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+
   },
 
   setup () {
@@ -90,6 +96,7 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
-  }
+  },
+
 })
 </script>

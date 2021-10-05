@@ -28,10 +28,11 @@
  <q-separator />
         <div class="row q-mt-md q-mr-sm">
             <div class="col q-px-sm">
-                <q-btn color="primary"  type="submit" label="Crear Cliente" />
+                <q-btn color="blue-2"  type="submit" label="Crear Cliente" />
             </div>
 </div>
  </q-form>
+
   </q-page>
 </template>
 
