@@ -1,5 +1,6 @@
 <template>
   <q-page class="flex-fluid flex-center">
+      <!-- tabla dinamica  -->
     <q-table
        title="Proveedores"
        :rows="proveedores"
@@ -22,6 +23,7 @@
               </template>
 
      </q-table>
+      <!-- dialog de confirmación para eliminación -->
      <q-dialog v-model="confirm" persistent>
      <q-card>
        <q-card-section class="row items-center">
@@ -35,7 +37,8 @@
        </q-card-actions>
      </q-card>
    </q-dialog>
-
+   <!-- fin dialog de confirmación para eliminación -->
+   <!-- dialog de edición -->
    <q-dialog v-model="confirmEdit" persistent>
    <q-card>
      <q-card-section class="row items-center">
@@ -77,8 +80,7 @@
      </q-card-actions>
    </q-card>
  </q-dialog>
-
-
+ <!-- fin dialog de edición -->
      <q-separator/>
   </q-page>
 </template>
@@ -92,11 +94,11 @@ export default defineComponent({
   name: 'listarProveedor',
   data() {
    return {
-     proveedores: [],
-     eliminar: [],
+     proveedores: [],// aqui se colocan los proveedores que usara la tabla dinamica
+     eliminar: [],// se coloca el proveedor a eliminar
      confirm: ref(false),
      confirmEdit: ref(false),
-     filter: '',
+     filter: '',// se usa para tener lo que el usuario busca en el seach de la tabla
      columns: [
        {name: "nitProveedor", label: "Nit", field: "nitProveedor", sortable: true},
         {name: "nombreProveedor", label: "Nombre", field: "nombreProveedor"},
@@ -108,7 +110,7 @@ export default defineComponent({
    }
 },
 methods:{
-  loadUsers(){
+  loadUsers(){// trae los proveedores de la api
     api.get("/listarProveedores")
     .then(response => (this.proveedores = response.data
           ))
@@ -116,15 +118,15 @@ methods:{
             console.log(e);
           });
   },
-  displayDeleteDialog(props){
+  displayDeleteDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
     this.confirm = true
     this.eliminar = props
   },
-  displayEditDialog(props){
+  displayEditDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
     this.confirmEdit = true
     this.eliminar = props
   },
-  deleteRow() {
+  deleteRow() { // elimina proveedor
     const index = this.proveedores.indexOf(this.eliminar.row);
       api.delete("/eliminarProveedor?nit=" + this.eliminar.row.nitProveedor)
           .then(response => response.data)
@@ -132,12 +134,12 @@ methods:{
             console.log(e);
           });
       //this.loadUsers();
-      this.proveedores.splice(index, 1);
+      this.proveedores.splice(index, 1);// borra proveedor de la tabla ya que se elimino tambien del back pero la tabla no lo sabe
 
     },
 },
-created(){
-  this.loadUsers();
+created(){// ejecuta codigo en una fase temprana de inicialización de la pagina
+  this.loadUsers();// llama el metodo que carga la tabla de información
 }
 })
 </script>

@@ -2,6 +2,7 @@
   <q-page class="flex-fluid flex-center">
     <div class="q-gutter-y-md">
       <q-card>
+            <!-- botones que dan función al tab -->
         <q-tabs
           v-model="tab"
           dense
@@ -11,22 +12,17 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="listar" color="primary" label="Listar Productos" />
-          <q-tab name="crear" label="Crear Productos" />
+          <q-tab name="cargarArchivo" color="primary" label="Cargar Archivo" />
+
         </q-tabs>
 
         <q-separator />
-
+        <!-- contenido que se muestra en el tab, se define que se muestra basandose en los name de los q-tab-panel pasandose a los v-model de los
+        q-tab-panels y q-tabs  -->
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="listar">
-            <div class="text-h6"></div>
-              <listarProductos />
-          </q-tab-panel>
-
-          <q-tab-panel name="crear">
-            <div class="text-h6">Productos Nuevo</div>
-
-aqui va el formulario de productos
+          <q-tab-panel   name="cargarArchivo">
+            <div class="text-h6">Cargar Archivo CSV de productos</div>
+              <cargarProductos class="flex" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
@@ -39,18 +35,17 @@ aqui va el formulario de productos
 <script>
 import { defineComponent } from 'vue';
 import { ref } from 'vue'
- import listarProductos from 'components/productos/listarproductos.vue'
-// import crearUsuarios from 'components/usuarios/crearUsuarios.vue'
+ import cargarProductos from 'components/productos/cargarProductos.vue'
+ //import crearUsuarios from 'components/usuarios/crearUsuarios.vue'
 
 export default defineComponent({
   name: 'Productos',
   components: {
-     listarProductos,
-    // crearUsuarios
+     cargarProductos
   },
   data(){
     return{
-       tab: ref('listar')
+       tab: ref('cargarArchivo')//se inicializa en este caso en el name del q-tab-panel que se quiere mostrar al cargar la pagina
     }
   }
 })

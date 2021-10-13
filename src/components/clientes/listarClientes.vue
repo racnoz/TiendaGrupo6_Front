@@ -1,5 +1,6 @@
 <template>
   <q-page class="flex-fluid flex-center">
+    <!-- tabla dinamica  -->
     <q-table
        title="Clientes"
        :rows="clientes"
@@ -22,6 +23,7 @@
               </template>
 
      </q-table>
+     <!-- dialog de confirmación para eliminación -->
      <q-dialog v-model="confirm" persistent>
      <q-card>
        <q-card-section class="row items-center">
@@ -35,6 +37,8 @@
        </q-card-actions>
      </q-card>
    </q-dialog>
+    <!-- fin dialog de confirmación para eliminación -->
+    <!-- dialog de edición -->
    <q-dialog v-model="confirmEdit" persistent>
    <q-card>
      <q-card-section class="row items-center">
@@ -76,7 +80,7 @@
      </q-card-actions>
    </q-card>
  </q-dialog>
-
+ <!-- fin dialog de edición -->
      <q-separator/>
   </q-page>
 </template>
@@ -90,11 +94,11 @@ export default defineComponent({
   name: 'listarClientes',
   data() {
    return {
-     clientes: [],
-     eliminar: [],
+     clientes: [], // aqui se colocan los clientes que usara la tabla dinamica
+     eliminar: [],// se coloca el cliente a eliminar
      confirm: ref(false),
        confirmEdit: ref(false),
-       filter: '',
+       filter: '',// se usa para tener lo que el usuario busca en el seach de la tabla
      columns: [
        {name: "cedulaCliente", label: "Cedula", field: "cedulaCliente", sortable: true},
         {name: "direccionCliente", label: "Dirección", field: "direccionCliente"},
@@ -102,12 +106,11 @@ export default defineComponent({
         {name: "nombreCliente", label: "Nombre", field: "nombreCliente"},
         {name: "telefonoCliente", label: "Telefono", field: "telefonoCliente"},
         {name: 'actions', label: 'Acciones', field: '', align: 'center'},
-
      ]
    }
 },
 methods:{
-  loadUsers(){
+  loadUsers(){ // trae los clientes de la api
     api.get("/listarClientes")
     .then(response => (this.clientes = response.data
           ))
@@ -115,15 +118,15 @@ methods:{
             console.log(e);
           });
   },
-  displayDeleteDialog(props){
+  displayDeleteDialog(props){ // muestra o culpa el dialog tambien pasa información del objeto
     this.confirm = true
     this.eliminar = props
   },
-  displayEditDialog(props){
+  displayEditDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
     this.confirmEdit = true
     this.eliminar = props
   },
-  deleteRow() {
+  deleteRow() { // elimina cliente
     const index = this.clientes.indexOf(this.eliminar.row);
       api.delete("/eliminarClientes?cedula=" + this.eliminar.row.cedulaCliente)
           .then(response => response.data)
@@ -131,12 +134,13 @@ methods:{
             console.log(e);
           });
       //this.loadUsers();
-      this.clientes.splice(index, 1);
+      this.clientes.splice(index, 1);// borra cliente de la tabla ya que se elimino tambien del back pero la tabla no lo sabe
+
 
     },
 },
-created(){
-  this.loadUsers();
+created(){// ejecuta codigo en una fase temprana de inicialización de la pagina
+  this.loadUsers(); // llama el metodo que carga la tabla de información
 }
 })
 </script>

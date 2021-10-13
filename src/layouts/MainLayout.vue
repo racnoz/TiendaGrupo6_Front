@@ -39,6 +39,7 @@
       </q-list>
     </q-drawer>
     <q-page-container>
+      <!-- vistas que seran dinamicas -->
       <router-view />
     </q-page-container>
   </q-layout>
@@ -47,7 +48,7 @@
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
 
-
+// rutas que se visualizaran en el menu
 const linksList = [
   {
     title: 'Usuarios',
@@ -73,12 +74,19 @@ const linksList = [
     icon: 'inventory_2',
     link: '/productos'
   },
+  {
+    title: 'Ventas',
+    caption: 'ventas',
+    icon: 'shopping_cart',
+    link: '/ventas'
+  },
 
 ];
 
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
+  //nombre del componente
   name: 'MainLayout',
 
   components: {

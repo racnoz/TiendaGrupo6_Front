@@ -54,10 +54,19 @@ methods:{
 onSubmit(n){
             api.post('/registrarProveedor?nitProveedor='+this.nitProveedor+'&nombreProveedor='+this.nombreProveedor+'&ciudadProveedor='+this.ciudadProveedor+'&direccionProveedor='+this.direccionProveedor+'&telefonoProveedor='+this.telefonoProveedor).then(response => {
                   console.log(response)
+                  this.triggerPositive (response.data, 'primary')
               }).catch(e => {
                  console.log(e);
+                    this.triggerPositive ("No fue posible completar la operación!", 'negative')
               });
         },
+        triggerPositive (mensaje, color) {
+           this.$q.notify({
+              color: color,
+              message: mensaje,
+               position: 'bottom-right',
+            })
+          },
 }
 
 })

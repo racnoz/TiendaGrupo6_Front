@@ -1,5 +1,6 @@
 <template>
   <q-page class="flex-fluid flex-center">
+    <!-- formulario de creación de usuarios -->
     <q-form
      @submit="onSubmit"
      @reset="onReset"
@@ -42,19 +43,20 @@
             </div>
 </div>
  </q-form>
+ <!-- fin formulario de creacion -->
   </q-page>
 </template>
 
 <script>
-import { api } from 'boot/axios'
+import { api } from 'boot/axios' //llamada a axios
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'crearUsuarios',
-  data() {
+  data() { // datos reactivos
 
    return {
-       cedulaUsuario : "",
+       cedulaUsuario : "",  // propiedades reactivas
        emailUsuario : "",
        nombreUsuario : "",
        password : "",
@@ -63,16 +65,16 @@ export default defineComponent({
    }
 },
 methods:{
-onSubmit(n){
+onSubmit(n){ // funcion llamada por el formulario de creacion de usuarios
             api.post('/registrarUsuario?cedulaUsuario='+this.cedulaUsuario+'&emailUsuario='+this.emailUsuario+'&nombreUsuario='+this.nombreUsuario+'&password='+this.password+'&usuario='+this.usuario).then(response => {
                   console.log(response)
-                  this.triggerPositive (response.data, 'primary')
+                  this.triggerPositive (response.data, 'primary') // llamada a la funcion que maneja las notificaciones por medio de notify
               }).catch(e => {
                  console.log(e);
-                   this.triggerPositive ("No fue posible completar la operación!", 'negative')
+                   this.triggerPositive ("No fue posible completar la operación!", 'negative')// llamada a la funcion que maneja las notificaciones por medio de notify
               });
         },
-  triggerPositive (mensaje, color) {
+  triggerPositive (mensaje, color) { // funcion de notify
      this.$q.notify({
         color: color,
         message: mensaje,

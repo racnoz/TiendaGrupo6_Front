@@ -1,5 +1,6 @@
 <template>
   <q-page class="flex-fluid flex-center">
+        <!-- tabla dinamica  -->
     <q-table
        title="Usuarios"
        :rows="usuarios"
@@ -13,7 +14,7 @@
            <q-btn dense round flat color="primary" @click="displayEditDialog(props)" icon="edit"></q-btn>
          </q-td>
        </template>
-       <template v-slot:top-right>
+    <template v-slot:top-right>    <!--  aqui en este template se define todas las propiedades de el buscador de la tabla -->
                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
                   <template v-slot:append>
                     <q-icon name="search" />
@@ -22,6 +23,8 @@
               </template>
 
      </q-table>
+         <!-- fin tabla dinamica  -->
+          <!-- dialog de confirmación para eliminación -->
      <q-dialog v-model="confirm" persistent>
      <q-card>
 
@@ -35,6 +38,8 @@
        </q-card-actions>
      </q-card>
    </q-dialog>
+   <!-- fin dialog de confirmación para eliminación -->
+   <!-- dialog de edición -->
    <q-dialog v-model="confirmEdit" persistent>
    <q-card>
      <q-card-section class="row items-center">
@@ -44,13 +49,12 @@
      <q-card-section class="row items-center">
        <q-form
         @submit="onSubmit"
-        @reset="onReset"
         class="q-gutter-md"
         ref="myForm"
       >
        <div class="row">
               <div class="col q-px-sm">
-                  <q-input v-model="cedulaUsuario" label="Cedula" disabled />
+                  <q-input v-model="cedulaUsuario" label="Cedula" disable />
               </div>
               <div class="col q-px-sm">
                   <q-input  v-model="emailUsuario" label="Correo" />
@@ -72,17 +76,17 @@
      </q-card-section>
      <q-card-actions align="right">
        <q-btn flat label="Cancel" color="primary" v-close-popup />
-       <q-btn flat label="Guardar Cambios" @click="deleteRow()" color="primary" v-close-popup />
+       <q-btn flat label="Guardar Cambios" type="submit" @click="onSubmit()" color="primary" v-close-popup />
      </q-card-actions>
    </q-card>
  </q-dialog>
-
+ <!-- fin dialog de edición -->
      <q-separator/>
   </q-page>
 </template>
 
 <script>
-import { api } from 'boot/axios'
+import { api } from 'boot/axios' // importación de axios el cual se instancia y se usa desde boot/axios
 import { defineComponent } from 'vue';
 import { ref } from 'vue'
 
@@ -90,52 +94,73 @@ export default defineComponent({
   name: 'listarUsuarios',
   data() {
    return {
-     usuarios: [],
-     eliminar: [],
+     usuarios: [], // aqui se colocan los usuarios que usara la tabla dinamica
+     eliminar: [],// se coloca el usuario a eliminar
      confirm: ref(false),
       confirmEdit: ref(false),
-       filter: '',
-     columns: [
+       filter: '',// se usa para tener lo que el usuario busca en el seach de la tabla
+     columns: [  // este array de objetos se le pasa a la tabla dinamica para definir y personalizar sus headers
        {name: "cedulaUsuario", label: "Cedula", field: "cedulaUsuario", sortable: true},
         {name: "emailUsuario", label: "Correo", field: "emailUsuario"},
         {name: "nombreUsuario", label: "Nombre", field: "nombreUsuario"},
         {name: "password", label: "Password", field: "password"},
         {name: "usuario", label: "Usuario", field: "usuario"},
-        {name: 'actions', label: 'Acciones', field: '', align: 'center'},
+        {name: 'actions', label: 'Acciones', field: '', align: 'center'}, // permite insertar botones de acciones en la tabla
 
-     ]
+     ],
+     cedulaUsuario : "", // propiedades reactivas que se conectan a los v-model del dialog de edicion.
+     emailUsuario : "",
+     nombreUsuario : "",
+     password : "",
+     usuario : ""
    }
 },
 methods:{
-  loadUsers(){
-    api.get("/listarUsuarios")
-    .then(response => (this.usuarios = response.data
+  async loadUsers(){// trae los usuarios de la api
+   await  api.get("/listarUsuarios") // llamada a la api por medio de axios que arriba nombramos como "api"
+    .then(response => (this.usuarios = response.data // la respuesta de la api se guarda en la propiedad usuarios definida en la data
           ))
-          .catch(e => {
+          .catch(e => {// se controlan errores
             console.log(e);
           });
   },
-  displayDeleteDialog(props){
-    this.confirm = true
-    this.eliminar = props
+  displayDeleteDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
+    this.confirm = true  // si se ha llamado esta funcion se envia true a la propiedad,  esta propiedad inicia como false y cuando cambia a true muestra el dialog de eliminación
+    this.eliminar = props  // al momento de llamar esta función recibe los datos de ese registro y lo pasamos a la propiedad eliminar que esta en data para usarlo. osea aqui viene el usuario con todos sus datos
   },
-  displayEditDialog(props){
-    this.confirmEdit = true
-    this.eliminar = props
+  displayEditDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
+    this.confirmEdit = true // si se ha llamado esta funcion se envia true a la propiedad,  esta propiedad inicia como false y cuando cambia a true muestra el dialog de edicion
+    this.confirm = props  // al momento de llamar esta función recibe los datos de ese registro y lo pasamos a la propiedad confirm que esta en data para usarlo. asi podemos recolocar los datos del usuario en el formulario de editar
+    this.cedulaUsuario = this.confirm.row.cedulaUsuario  // a la propiedad cedulaUsuario que se creo en la data se le pasa la cedulaUsuario que se guardo en el confirm al momento de darle al boton de editar de ese registro
+    this.emailUsuario = this.confirm.row.emailUsuario
+    this.nombreUsuario = this.confirm.row.nombreUsuario
+    this.password = this.confirm.row.password
+    this.usuario = this.confirm.row.usuario
+
   },
-  deleteRow() {
-    const index = this.usuarios.indexOf(this.eliminar.row);
+  deleteRow() { // elimina usuario
+    const index = this.usuarios.indexOf(this.eliminar.row);  // cogemos el indice del registro al que se le dio eliminar y se le pasa a indexOf con lo cual no da el usuario con ese indice y se guarda en la variable.
       api.delete("/eliminarUsuarios?cedula=" + this.eliminar.row.cedulaUsuario)
           .then(response => {
-            this.triggerPositive (response.data, 'primary');
+            this.triggerPositive (response.data, 'primary'); // se llama la funcion de notify para mostrar una notificación
           })
           .catch(e => {
             console.log(e);
           });
       //this.loadUsers();
-      this.usuarios.splice(index, 1);
+      this.usuarios.splice(index, 1);// borra cliente de la tabla ya que se elimino tambien del back pero la tabla no lo sabe
     },
-    triggerPositive (mensaje, color) {
+    onSubmit(n){ // evento que se usa desde el formulario de edicion
+                api.post('/editarUsuario?cedulaUsuario='+this.cedulaUsuario+'&emailUsuario='+this.emailUsuario+'&nombreUsuario='+this.nombreUsuario+'&password='+this.password+'&usuario='+this.usuario).then(response => {
+                      console.log(response)
+                      this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
+                  }).catch(e => {
+                     console.log(e);
+                       this.triggerPositive ("No fue posible completar la operación!", 'negative') //llamada a notify para mostrar notificacion en caso de error
+                  });
+                  this.loadUsers(); // se llama de nuevo la funcion que trae los usuarios para llenar la tabla asi se ve el cambio
+            },
+    triggerPositive (mensaje, color) {// funcion notify
        this.$q.notify({
           color: color,
           message: mensaje,
@@ -143,8 +168,8 @@ methods:{
         })
       },
 },
-created(){
-  this.loadUsers();
+created(){// ejecuta codigo en una fase temprana de inicialización de la pagina
+  this.loadUsers();// llama el metodo que carga la tabla de información
 }
 })
 </script>
