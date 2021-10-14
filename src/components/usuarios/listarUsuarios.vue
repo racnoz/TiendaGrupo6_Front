@@ -8,19 +8,21 @@
        row-key="name"
        :filter="filter"
      >
-     <template v-slot:body-cell-actions="props">
-         <q-td :props="props">
+     <template v-slot:body-cell-actions="props" >
+         <q-td :props="props" >
            <q-btn dense round flat color="red" @click="displayDeleteDialog(props)" icon="delete"></q-btn>
            <q-btn dense round flat color="primary" @click="displayEditDialog(props)" icon="edit"></q-btn>
          </q-td>
        </template>
-    <template v-slot:top-right>    <!--  aqui en este template se define todas las propiedades de el buscador de la tabla -->
+    <template v-slot:top-right >    <!--  aqui en este template se define todas las propiedades de el buscador de la tabla -->
                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
                   <template v-slot:append>
                     <q-icon name="search" />
                   </template>
                 </q-input>
+
               </template>
+
 
      </q-table>
          <!-- fin tabla dinamica  -->

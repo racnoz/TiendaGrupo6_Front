@@ -37,11 +37,76 @@
       row-key="name"
     />
         </div>
-
    </div>
          </q-card-section>
        </q-card>
-       <!-- Inician clientes -->
+       <!-- prueba -->
+       <q-card class="q-ma-md q-pa-md" >
+         <q-card-title class="text-h6">
+         </q-card-title>
+            <q-card-section >
+       <q-list bordered class="rounded-borders" v-for="(p, index) in compra" key="index">
+            <q-item-label header>Productos seleccionados</q-item-label>
+            <q-item >
+              <q-item-section avatar top>
+                <q-icon name="dashboard" color="black" size="34px" />
+              </q-item-section>
+              <q-item-section top class="col-2 gt-sm">
+                <q-item-label lines="1" class="q-mt-sm"> Codigo: {{p.codigoProducto}} - Producto: {{p.nombreProducto}}</q-item-label>
+                <q-item-label lines="1">
+                  <span class="text-weight-medium"> Precio Venta:{{p.precioVenta}} </span>
+
+                </q-item-label>
+              </q-item-section>
+              <q-item-section top>
+                <q-item-label lines="1">
+                  <span class="text-grey-8"> Precio Compra: {{p.precioCompra}} </span>
+                </q-item-label>
+                <q-item-label caption lines="1">
+                Iva Producto: {{p.ivaCompra}}
+                </q-item-label>
+                <q-item-label caption lines="1">
+                 Nit Proveedor:{{p.nitProveedor}}
+                </q-item-label>
+                <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase">
+                  <!-- <span class="cursor-pointer">Open in GitHub</span> -->
+                </q-item-label>
+              </q-item-section>
+              <q-item-section top>
+                <div class="text-grey-8 q-gutter-xs">
+                <q-input v-model="cantidad[index]"
+                 @change="numberPostive(index)"
+                 type="number"
+                value="1"
+                 min="1" />
+                </div>
+              </q-item-section>
+              <q-item-section top>
+                <div class="text-grey-8 q-gutter-xs col-2 gt-sm" >
+                  <q-item-label lines="1" class="q-mt-xs text-body2 text-weight-bold text-center text-uppercase">
+                  <span> $ {{cantidad[index]*p.precioVenta}}</span>
+                  </q-item-label>
+
+                </div>
+              </q-item-section>
+              <q-item-section top side>
+                <div class="text-grey-8 q-gutter-xs">
+                  <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="deleteItem(index)" />
+                  <!-- <q-btn class="gt-xs" size="12px" flat dense round icon="done" /> -->
+                  <!-- <q-btn size="12px" flat dense round icon="more_vert" /> -->
+                </div>
+              </q-item-section>
+            </q-item>
+
+          </q-list>
+          <div class="text-h6 text-weight-bold text-center text-uppercase q-ma-sm" >
+            Total iva:$ {{totalIva}} - Total Compra sin Iva:$ {{totalCompra}}  - Total Compra: ${{totalCompraIva}} - consecutivo {{consecutivo}}
+          </div>
+          <div class="  text-center text-uppercase q-ma-sm" >
+          <q-btn color="primary" class="full-width" @click="generaCompra()" label="Aceptar Compra" />
+          </div>
+        </q-card-section>
+</q-card>
        <q-card class="q-ma-md q-pa-lg">
          <q-card-title class="text-h6">
            Productos
@@ -53,7 +118,6 @@
        <template v-slot:before>
          <q-icon name="inventory_2" />
        </template>
-
        <template v-slot:append>
          <q-icon v-if="product !== ''" name="close" @click="product = ''" class="cursor-pointer" />
          <q-icon name="search" />
@@ -62,7 +126,6 @@
         </div>
         <div class="flex flex-center col  ">
            <!-- <q-btn color="primary" @click="loadProduct()" class="full-width" label="Agregar" /> -->
-
   </div>
   <div class="flex flex-center col ">
      <!-- <q-btn color="secondary" @click="clearProduct()" class="full-width" label="Limpiar" /> -->
@@ -80,7 +143,7 @@
              </q-card-section>
            </q-card> -->
            <div class="row">
-             <div class="col-3 q-ma-md" v-for="p in producto">
+             <div class="col-3 q-ma-md" v-for="p in items">
            <q-card class="my-card "  >
      <q-img src="https://random.imagecdn.app/500/150" />
 
@@ -119,8 +182,9 @@
      <q-separator />
 
      <q-card-actions>
-       <q-btn flat round icon="credit_card" />
-       <q-btn flat color="primary">
+         <q-icon name="credit_card" />
+       
+       <q-btn flat color="primary" @click="add(p)">
          Comprar
        </q-btn>
      </q-card-actions>
@@ -147,7 +211,10 @@ export default defineComponent({
       cliente: ref([]),
       product: ref(''),
       producto:ref([]),
-        productos:ref([])
+      productos:ref([]),
+      compra:ref([]),
+      cantidad:ref([]),
+      consecutivo:ref('')
     }
   },
   methods:{
@@ -187,9 +254,60 @@ export default defineComponent({
            position: 'bottom-right',
         })
       },
+      add(value){
+        this.compra.push(value);
+        this.cantidad.push(1);
+      },
+      deleteItem(index){
+            this.compra.splice(index, 1);
+            this.cantidad.splice(index, 1);
+      },
+      numberPostive(index){
+
+        if(this.cantidad[index] < 0){
+        this.cantidad[index] = 0
+        }
+      },
+      generaCompra(){
+        const timestamp = +new Date();
+        this.consecutivo = timestamp
+      }
   },
   created(){
     this.loadProduct();
-  }
+
+},
+computed:{
+  items() {
+     return this.producto.filter(item => {
+       return item.codigoProducto.toString().toLowerCase().includes(this.product.toLowerCase());
+     });
+   },
+   totalCompra(){
+     var compra = 0;
+     var cantidad = this.cantidad;
+     this.compra.forEach(function(elemento, indice){
+       compra += elemento["precioVenta"]*cantidad[indice];
+     })
+     return compra;
+   },
+   totalCompraIva(){
+     var compra = 0;
+     var cantidad = this.cantidad;
+     this.compra.forEach(function(elemento, indice){
+       compra += (elemento["precioVenta"]*cantidad[indice])+(elemento["ivaCompra"]*cantidad[indice]);
+     })
+     return compra;
+   },
+   totalIva(){
+     var ivaTotal = 0;
+     var cantidad = this.cantidad;
+     this.compra.forEach(function(elemento, indice){
+       ivaTotal += elemento["ivaCompra"]*cantidad[indice];
+     })
+     return ivaTotal;
+   }
+
+}
 })
 </script>
