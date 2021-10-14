@@ -28,7 +28,7 @@
            </div>
  </div>
  <q-separator />
-        <div class="row q-mt-md q-mr-sm" style="margin-top: 16px !important; margin-bottom: 16px !important; margin-left: 550px !important">
+        <div class="row q-mt-md q-mr-sm text-center" style="margin-top: 16px !important; margin-bottom: 16px !important">
             <div class="col q-px-sm">
                 <q-btn color="secondary"  type="submit" label="Crear Cliente" />
             </div>
