@@ -24,6 +24,7 @@
      </q-table>
      <q-dialog v-model="confirm" persistent>
      <q-card>
+
        <q-card-section class="row items-center">
          <q-avatar icon="delete" color="primary" text-color="white" />
          <span class="q-ml-sm">¿Desea eliminar este cliente? </span>
@@ -132,8 +133,14 @@ methods:{
           });
       //this.loadUsers();
       this.clientes.splice(index, 1);
-
     },
+    triggerPositive (mensaje, color) {
+       this.$q.notify({
+          color: color,
+          message: mensaje,
+           position: 'bottom-right',
+        })
+}
 },
 created(){
   this.loadUsers();

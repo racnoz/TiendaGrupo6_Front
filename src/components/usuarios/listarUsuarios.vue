@@ -29,6 +29,7 @@
          <q-avatar icon="delete" color="primary" text-color="white" />
          <span class="q-ml-sm">¿Desea eliminar a este usuario? </span>
        </q-card-section>
+
        <q-card-actions align="right">
          <q-btn flat label="Cancel" color="primary" v-close-popup />
          <q-btn flat label="Eliminar usuario" @click="deleteRow()" color="primary" v-close-popup />
@@ -141,7 +142,7 @@ methods:{
           message: mensaje,
            position: 'bottom-right',
         })
-      },
+      }
 },
 created(){
   this.loadUsers();
