@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="this.$route.path !== '/'"
           flat
           dense
           round
@@ -15,11 +16,22 @@
           Tienda Grupo 6
         </q-toolbar-title>
 
-        <div></div>
+        <div>
+          <q-btn
+            v-if="this.$route.path !== '/'"
+            flat
+            dense
+            round
+            icon="logout"
+            aria-label=""
+            @click="salir"
+          />
+        </div>
       </q-toolbar>
     </q-header>
 
     <q-drawer
+      v-if="this.$route.path !== '/'"
       v-model="leftDrawerOpen"
       show-if-above
       bordered
@@ -105,6 +117,17 @@ export default defineComponent({
       }
     }
   },
+  methods:{
+    salir(){
+      this.$router.push({ path: `/` });
+      this.$store.commit("noAutenticado");
+    }
+  },
+  mounted() {
+   if (this.$store.state.usuario === false) {
+       this.$router.push({ path: `/` });
+           }
+ }
 
 })
 </script>

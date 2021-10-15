@@ -17,7 +17,17 @@ export default store(function (/* { ssrContext } */) {
     modules: {
       // example
     },
-
+    state:{
+      usuario: false
+    },
+    mutations: {
+      autenticado(state){
+        state.usuario = true
+      },
+      noAutenticado(state){
+        state.usuario = false
+      }
+    },
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
     strict: process.env.DEBUGGING

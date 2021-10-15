@@ -4,7 +4,7 @@
       <q-card>
           <!-- botones que dan función al tab -->
         <q-tabs
-          v-model="tab" 
+          v-model="tab"
           dense
           class="text-grey"
           active-color="primary"
@@ -54,6 +54,11 @@ export default defineComponent({
     return{
        tab: ref('listar')//se inicializa en este caso en el name del q-tab-panel que se quiere mostrar al cargar la pagina
     }
-  }
+  },
+  mounted() {
+   if (this.$store.state.usuario === false) {
+       this.$router.push({ path: `/` });
+           }
+ }
 })
 </script>

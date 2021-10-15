@@ -183,7 +183,7 @@
 
      <q-card-actions>
          <q-icon name="credit_card" />
-       
+
        <q-btn flat color="primary" @click="add(p)">
          Comprar
        </q-btn>
@@ -307,7 +307,11 @@ computed:{
      })
      return ivaTotal;
    }
-
+},
+mounted() {
+ if (this.$store.state.usuario === false) {
+     this.$router.push({ path: `/` });
+         }
 }
 })
 </script>

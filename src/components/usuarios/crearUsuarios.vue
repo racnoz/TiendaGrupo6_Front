@@ -83,8 +83,6 @@ onSubmit(n){ // funcion llamada por el formulario de creacion de usuarios
     },
 
 },
-created(){
-}
 
 })
 </script>

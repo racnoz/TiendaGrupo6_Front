@@ -47,6 +47,11 @@ export default defineComponent({
     return{
        tab: ref('cargarArchivo')//se inicializa en este caso en el name del q-tab-panel que se quiere mostrar al cargar la pagina
     }
-  }
+  },
+  mounted() {
+   if (this.$store.state.usuario === false) {
+       this.$router.push({ path: `/` });
+           }
+ }
 })
 </script>
