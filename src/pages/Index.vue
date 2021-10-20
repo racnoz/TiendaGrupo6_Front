@@ -49,9 +49,10 @@ export default defineComponent({
     onSubmit(){
                 api.get('/comprobarUsuario?pass='+this.password+'&usuario='+this.usuario).then(response => {
                       console.log(response)
-                      if(response.data == true){
+                      if(response.data !== -1){
                          this.$router.push({path: `/usuarios`})
                           this.$store.commit('autenticado');
+                          this.$store.commit('updateCedulaUsuario', response.data)
                       }else{
                          this.triggerPositive ("Información de usuario incorrecta", 'negative')
                       }
@@ -68,9 +69,7 @@ export default defineComponent({
                    position: 'bottom-right',
                 })
               },
-  },
-  created(){
-  },
 
+  },
 })
 </script>

@@ -193,6 +193,7 @@
  </div>
          </q-card-section>
           </q-card>
+         {{compra}}
   </q-page>
 </template>
 
@@ -214,7 +215,7 @@ export default defineComponent({
       productos:ref([]),
       compra:ref([]),
       cantidad:ref([]),
-      consecutivo:ref('')
+      consecutivo:ref(0)
     }
   },
   methods:{
@@ -269,8 +270,38 @@ export default defineComponent({
         }
       },
       generaCompra(){
-        const timestamp = +new Date();
-        this.consecutivo = timestamp
+        // api.post('/registrarVenta?cedulaCliente='+this.cliente[0].cedulaCliente+'&cedulaUsuario='+this.$store.state.cedulaUsuario+'&codigoVenta='
+        // +Number(this.generaConsecutivo())+
+        // '&ivaVenta='+this.totalIva+'&totalVenta='+this.totalCompra+'&valorVenta='+this.totalCompraIva).then(response => {
+        //       console.log(response)
+        //       this.triggerPositive (response.data, 'primary')
+        //   }).catch(e => {
+        //      console.log(e);
+        //        this.triggerPositive ("No fue posible completar la operación!", 'negative')
+        //      });
+        this.registraProducto()
+      },
+      registraProducto(){
+        for(var key in this.compra){
+          let ivaTotalProducto = this.compra[key].ivaCompra*this.cantidad[key]
+          let valorTotalProducto = this.compra[key].precioVenta*this.cantidad[key]
+          console.log(valorTotalProducto)
+          api.post('/registrarDetalleVenta?cantidadProducto='+this.cantidad[key]+'&codigoDetalleVenta='+30+'&codigoProducto='
+          +this.compra[key].codigoProducto+
+          '&codigoVenta='+1+'&valorIva='+ivaTotalProducto+'&valorTotal='+valorTotalProducto+'&valorVenta='+this.compra[key].precioVenta).then(response => {
+                console.log(response)
+                this.triggerPositive (response.data, 'primary')
+            }).catch(e => {
+               console.log(e);
+                 this.triggerPositive ("No fue posible completar la operación!", 'negative')
+               });
+        }
+
+
+      },
+      generaConsecutivo(){
+        const timestamp = parseInt(Date.now());
+        return this.consecutivo = Number(timestamp*1);
       }
   },
   created(){
@@ -306,12 +337,17 @@ computed:{
        ivaTotal += elemento["ivaCompra"]*cantidad[indice];
      })
      return ivaTotal;
-   }
+   },
+     getCedulaUsuario(){
+       return this.$store.cedulaUsuario
+
+   },
 },
 mounted() {
  if (this.$store.state.usuario === false) {
      this.$router.push({ path: `/` });
          }
+    console.log(this.$store.state.cedulaUsuario)
 }
 })
 </script>

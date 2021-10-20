@@ -18,7 +18,8 @@ export default store(function (/* { ssrContext } */) {
       // example
     },
     state:{
-      usuario: false
+      usuario: false,
+      cedulaUsuario: ""
     },
     mutations: {
       autenticado(state){
@@ -26,6 +27,9 @@ export default store(function (/* { ssrContext } */) {
       },
       noAutenticado(state){
         state.usuario = false
+      },
+      updateCedulaUsuario(state, cedula){
+        state.cedulaUsuario = cedula
       }
     },
     // enable strict mode (adds overhead!)
