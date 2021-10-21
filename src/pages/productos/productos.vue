@@ -12,7 +12,8 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="cargarArchivo" color="primary" label="Cargar Archivo" />
+          <q-tab name="listarProductos" color="primary" label="Listar Productos " />
+          <q-tab name="crearProductos" color="primary" label="Crear Productos " />
 
         </q-tabs>
 
@@ -20,9 +21,11 @@
         <!-- contenido que se muestra en el tab, se define que se muestra basandose en los name de los q-tab-panel pasandose a los v-model de los
         q-tab-panels y q-tabs  -->
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel   name="cargarArchivo">
-            <div class="text-h6">Cargar Archivo CSV de productos</div>
-              <cargarProductos class="flex" />
+          <q-tab-panel   name="listarProductos" style="padding: 0px !important" >
+              <listarProductos class="" />
+          </q-tab-panel>
+          <q-tab-panel   name="crearProductos" style="padding: 0px !important" >
+              <crearProductos class="" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
@@ -35,17 +38,18 @@
 <script>
 import { defineComponent } from 'vue';
 import { ref } from 'vue'
- import cargarProductos from 'components/productos/cargarProductos.vue'
- //import crearUsuarios from 'components/usuarios/crearUsuarios.vue'
+ import listarProductos from 'components/productos/listarProductos.vue'
+ import crearProductos from 'components/productos/crearProductos.vue'
 
 export default defineComponent({
   name: 'Productos',
   components: {
-     cargarProductos
+     listarProductos,
+     crearProductos
   },
   data(){
     return{
-       tab: ref('cargarArchivo')//se inicializa en este caso en el name del q-tab-panel que se quiere mostrar al cargar la pagina
+       tab: ref('listarProductos')//se inicializa en este caso en el name del q-tab-panel que se quiere mostrar al cargar la pagina
     }
   },
   mounted() {

@@ -57,7 +57,7 @@
       >
        <div class="row">
               <div class="col q-px-sm">
-                  <q-input v-model="nitProveedor" label="Nit" />
+                  <q-input v-model="nitProveedor" disable label="Nit" />
               </div>
               <div class="col q-px-sm">
                   <q-input  v-model="nombreProveedor" label="Nombre" />
@@ -79,7 +79,7 @@
      </q-card-section>
      <q-card-actions align="right">
        <q-btn flat label="Cancel" color="primary" v-close-popup />
-       <q-btn flat label="Guardar Cambios" @click="deleteRow()" color="primary" v-close-popup />
+       <q-btn flat label="Guardar Cambios" @click="onSubmit()" color="primary" v-close-popup />
      </q-card-actions>
    </q-card>
  </q-dialog>
@@ -109,7 +109,12 @@ export default defineComponent({
         {name: "direccionProveedor", label: "Dirección", field: "direccionProveedor"},
         {name: "telefonoProveedor", label: "Telefono", field: "telefonoProveedor"},
         {name: 'actions', label: 'Acciones', field: '', align: 'center'},
-     ]
+     ],
+     nitProveedor : "",
+     nombreProveedor : "",
+     ciudadProveedor : "",
+     direccionProveedor : "",
+    telefonoProveedor : "",
    }
 },
 methods:{
@@ -127,19 +132,44 @@ methods:{
   },
   displayEditDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
     this.confirmEdit = true
-    this.eliminar = props
+    this.confirm = props
+    this.nitProveedor = this.confirm.row.nitProveedor  // a la propiedad cedulaUsuario que se creo en la data se le pasa el nit que se guardo en el confirm al momento de darle al boton de editar de ese registro
+    this.nombreProveedor = this.confirm.row.nombreProveedor
+    this.ciudadProveedor = this.confirm.row.ciudadProveedor
+    this.direccionProveedor = this.confirm.row.direccionProveedor
+    this.telefonoProveedor = this.confirm.row.telefonoProveedor
   },
   deleteRow() { // elimina proveedor
     const index = this.proveedores.indexOf(this.eliminar.row);
       api.delete("/eliminarProveedor?nit=" + this.eliminar.row.nitProveedor)
-          .then(response => response.data)
+          .then(response => {
+            this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
+        })
           .catch(e => {
             console.log(e);
+            this.triggerPositive ("No fue posible completar la operación!", 'negative')
           });
       //this.loadUsers();
       this.proveedores.splice(index, 1);// borra proveedor de la tabla ya que se elimino tambien del back pero la tabla no lo sabe
 
     },
+    async  onSubmit(){ // evento que se usa desde el formulario de edicion
+                await  api.post('/editarProveedor?ciudadProveedor='+this.ciudadProveedor+'&direccionProveedor='+this.direccionProveedor+'&nitProveedor='+this.nitProveedor+'&nombreProveedor='+this.nombreProveedor+'&telefonoProveedor='+this.telefonoProveedor).then(response => {
+                      console.log(response)
+                      this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
+                  }).catch(e => {
+                     console.log(e);
+                       this.triggerPositive ("No fue posible completar la operación!", 'negative') //llamada a notify para mostrar notificacion en caso de error
+                  });
+                  this.loadUsers(); // se llama de nuevo la funcion que trae los usuarios para llenar la tabla asi se ve el cambio
+            },
+            triggerPositive (mensaje, color) {// funcion notify
+       this.$q.notify({
+          color: color,
+          message: mensaje,
+           position: 'bottom-right',
+        })
+      }
 },
 created(){// ejecuta codigo en una fase temprana de inicialización de la pagina
   this.loadUsers();// llama el metodo que carga la tabla de información
