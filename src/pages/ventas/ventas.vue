@@ -142,19 +142,19 @@
               <q-icon name="style" />Iva Producto: {{p.ivaCompra}} Nit Proveedor:{{p.nitProveedor}} NombreProducto:{{p.nombreProducto}} Precio Compra: {{p.precioCompra}} Precio Venta:{{p.precioVenta}}
              </q-card-section>
            </q-card> -->
-           <div class="row">
-             <div class="col-3 q-ma-md" v-for="p in items">
+           <div class="row justify-center">
+             <div class="col-xs-12 col-sm-5 col-md-3 q-ma-md" v-for="p in items">
            <q-card class="my-card "  >
      <q-img src="https://random.imagecdn.app/500/150" />
 
      <q-card-section>
-       <q-btn
+       <!-- <q-btn
          fab
          color="primary"
          icon="attach_money"
          class="absolute"
          style="top: 0; right: 12px; transform: translateY(-50%);"
-       />
+       /> -->
         {{p.codigoProducto}} - {{p.nombreProducto}}
        <div class="row no-wrap items-center">
          <div class="col text-h6 ellipsis">
@@ -215,7 +215,7 @@ export default defineComponent({
       productos:ref([]),
       compra:ref([]),
       cantidad:ref([]),
-      consecutivo:ref(0)
+      consecutivo:ref()
     }
   },
   methods:{
@@ -269,16 +269,15 @@ export default defineComponent({
         this.cantidad[index] = 0
         }
       },
-      generaCompra(){
-        // api.post('/registrarVenta?cedulaCliente='+this.cliente[0].cedulaCliente+'&cedulaUsuario='+this.$store.state.cedulaUsuario+'&codigoVenta='
-        // +Number(this.generaConsecutivo())+
-        // '&ivaVenta='+this.totalIva+'&totalVenta='+this.totalCompra+'&valorVenta='+this.totalCompraIva).then(response => {
-        //       console.log(response)
-        //       this.triggerPositive (response.data, 'primary')
-        //   }).catch(e => {
-        //      console.log(e);
-        //        this.triggerPositive ("No fue posible completar la operación!", 'negative')
-        //      });
+      async generaCompra(){
+      await  api.post('/registrarVenta?cedulaCliente='+this.cliente[0].cedulaCliente+'&cedulaUsuario='+this.$store.state.cedulaUsuario+'&ivaVenta='+this.totalIva+'&totalVenta='+this.totalCompra+'&valorVenta='+this.totalCompraIva).then(response => {
+              console.log(response)
+              this.consecutivo = response.data
+              this.triggerPositive ("se ha guardado exitosamente la venta", 'primary')
+          }).catch(e => {
+             console.log(e);
+               this.triggerPositive ("No fue posible completar la operación!", 'negative')
+             });
         this.registraProducto()
       },
       registraProducto(){
@@ -286,11 +285,10 @@ export default defineComponent({
           let ivaTotalProducto = this.compra[key].ivaCompra*this.cantidad[key]
           let valorTotalProducto = this.compra[key].precioVenta*this.cantidad[key]
           console.log(valorTotalProducto)
-          api.post('/registrarDetalleVenta?cantidadProducto='+this.cantidad[key]+'&codigoDetalleVenta='+30+'&codigoProducto='
+          api.post('/registrarDetalleVenta?cantidadProducto='+this.cantidad[key]+'&codigoProducto='
           +this.compra[key].codigoProducto+
-          '&codigoVenta='+1+'&valorIva='+ivaTotalProducto+'&valorTotal='+valorTotalProducto+'&valorVenta='+this.compra[key].precioVenta).then(response => {
+          '&codigoVenta='+this.consecutivo+'&valorIva='+ivaTotalProducto+'&valorTotal='+valorTotalProducto+'&valorVenta='+this.compra[key].precioVenta).then(response => {
                 console.log(response)
-                this.triggerPositive (response.data, 'primary')
             }).catch(e => {
                console.log(e);
                  this.triggerPositive ("No fue posible completar la operación!", 'negative')
@@ -299,10 +297,6 @@ export default defineComponent({
 
 
       },
-      generaConsecutivo(){
-        const timestamp = parseInt(Date.now());
-        return this.consecutivo = Number(timestamp*1);
-      }
   },
   created(){
     this.loadProduct();

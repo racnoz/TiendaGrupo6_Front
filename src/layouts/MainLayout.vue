@@ -92,6 +92,12 @@ const linksList = [
     icon: 'shopping_cart',
     link: '/ventas'
   },
+  {
+    title: 'Reportes',
+    caption: 'reportes',
+    icon: 'summarize',
+    link: '/reportes'
+  },
 
 ];
 
