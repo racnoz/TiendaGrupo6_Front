@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex-fluid flex-center">
-    <q-card class="q-ma-md q-pa-lg">
+  <q-page class="flex flex-center backImg">
+    <q-card class="cent q-ma-md q-pa-md" style="margin-top: 30px;" >
       <q-card-title class="text-h6">
           Cliente
       </q-card-title>
@@ -41,7 +41,7 @@
          </q-card-section>
        </q-card>
        <!-- prueba -->
-       <q-card class="q-ma-md q-pa-md" >
+       <q-card class="q-ma-md q-pa-md cent" >
          <q-card-title class="text-h6">
          </q-card-title>
             <q-card-section >
@@ -107,7 +107,7 @@
           </div>
         </q-card-section>
 </q-card>
-       <q-card class="q-ma-md q-pa-lg">
+       <q-card class="q-ma-md q-pa-lg" >
          <q-card-title class="text-h6">
            Productos
          </q-card-title>
@@ -193,8 +193,7 @@
  </div>
          </q-card-section>
           </q-card>
-         {{compra}}
-  </q-page>
+    </q-page>
 </template>
 
 <script>
@@ -345,3 +344,14 @@ mounted() {
 }
 })
 </script>
+
+<style>
+
+.backImg{
+  background-image: url('~assets/index.jpg');
+  background-size:cover;
+ }
+ .cent{
+   width: 100%;
+ }
+</style>

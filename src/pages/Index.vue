@@ -1,6 +1,15 @@
 <template>
-  <q-page class="flex flex-center bg-blue-grey-9" >
-      <q-form  class="q-gutter-md"  @submit="onSubmit">
+  <q-page class="flex flex-center">
+  <q-img alt="Fondo" src="../assets/Index.jpg" style="width: 100%; height: 100%; margin: 0; opacity: 0.8 !important"/>
+      <div class="text-h1" style="position: absolute; top: 1%; font-weight:bold; font-family: Arial; color: #0b3a31; font-size: 5em;">
+        Bienvenido(a) a La Tienda
+      </div>
+      <div class="text-h5" style="position: absolute; top: 20%; font-weight:bold; font-family:'Helvetica','Verdana','Monaco',sans-serif; color: #0b3a31">
+        Inicie sesión para comenzar
+      </div>
+      <q-form  class="q-gutter-md"
+       @submit="onSubmit"
+        style=" opacity: 0.9 !important; position: absolute; top: 25%">
       <q-card class="q-pa-lg shadow-24" square style="width: 400px;">
         <q-card-title class="text-h5">
         Login

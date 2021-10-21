@@ -20,13 +20,12 @@
         <!-- contenido que se muestra en el tab, se define que se muestra basandose en los name de los q-tab-panel pasandose a los v-model de los
         q-tab-panels y q-tabs  -->
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="listar">
+          <q-tab-panel name="listar" style="padding: 0px !important">
             <div class="text-h6"></div>
             <listarClientes />
           </q-tab-panel>
 
-          <q-tab-panel name="crear">
-            <div class="text-h6">Cliente Nuevo</div>
+          <q-tab-panel name="crear" style="padding: 0px !important">
             <crearClientes />
 
           </q-tab-panel>

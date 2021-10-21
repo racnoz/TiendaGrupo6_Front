@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex-fluid flex-center">
-    <div class="q-gutter-y-md">
+    <div class="q-gutter-y-md"  style="position: absolute; top: 0%; width: 100%">
       <q-card>
         <!-- botones que dan función al tab -->
         <q-tabs
@@ -20,13 +20,11 @@
         <!-- contenido que se muestra en el tab, se define que se muestra basandose en los name de los q-tab-panel pasandose a los v-model de los
         q-tab-panels y q-tabs  -->
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="listar">
-            <div class="text-h6"></div>
+          <q-tab-panel name="listar" style="padding: 0px !important">
            <listarProveedores />
           </q-tab-panel>
+          <q-tab-panel name="crear" style="padding: 0px !important">
 
-          <q-tab-panel name="crear">
-            <div class="text-h6">Proveedor Nuevo</div>
             <crearProveedores />
 
           </q-tab-panel>

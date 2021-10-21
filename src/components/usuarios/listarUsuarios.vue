@@ -1,13 +1,18 @@
 <template>
-  <q-page class="flex-fluid flex-center">
+  <q-page class="flex flex-center">
+    <q-img alt="Fondo" src="../../assets/1234.jpg" style="width: 100%; height: 100%; margin: 0; opacity: 0.8 !important"/>
+
         <!-- tabla dinamica  -->
-    <q-table
-       title="Usuarios"
-       :rows="usuarios"
-       :columns="columns"
-       row-key="name"
-       :filter="filter"
-     >
+        <q-table
+           style="position: absolute !important; top: 2% !important; width:95% !important; opacity: 0.9 !important; border: solid 1px #ff846a !important"
+           active-color="secondary"
+           indicator-color="secondary"
+           title="Usuarios"
+           :rows="usuarios"
+           :columns="columns"
+           row-key="name"
+           :filter="filter"
+         >
      <template v-slot:body-cell-actions="props" >
          <q-td :props="props" >
            <q-btn dense round flat color="red" @click="displayDeleteDialog(props)" icon="delete"></q-btn>
@@ -155,7 +160,7 @@ methods:{
     onSubmit(n){ // evento que se usa desde el formulario de edicion
                 api.post('/editarUsuario?cedulaUsuario='+this.cedulaUsuario+'&emailUsuario='+this.emailUsuario+'&nombreUsuario='+this.nombreUsuario+'&password='+this.password+'&usuario='+this.usuario).then(response => {
                       console.log(response)
-                      this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
+                      this.triggerPositive ("Usuario editado", 'primary') //llamada a notify para mostrar notificacion en caso de succes
                   }).catch(e => {
                      console.log(e);
                        this.triggerPositive ("No fue posible completar la operación!", 'negative') //llamada a notify para mostrar notificacion en caso de error

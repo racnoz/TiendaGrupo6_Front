@@ -1,7 +1,10 @@
 <template>
-  <q-page class="flex-fluid flex-center">
+  <q-page class="flex flex-center">
+    <q-img alt="Fondo" src="../../assets/1234.jpg" style="width: 100%; height: 100%; margin: 0; opacity: 0.8 !important"/>
+
       <!-- tabla dinamica  -->
     <q-table
+    style="position: absolute; top: 2%; width:95%; opacity: 0.9; border: solid 1px #ff846a !important"
        title="Proveedores"
        :rows="proveedores"
        :columns="columns"

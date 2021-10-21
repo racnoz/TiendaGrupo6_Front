@@ -1,7 +1,10 @@
 <template>
-  <q-page class="flex-fluid flex-center">
+  <q-page class="flex flex-center">
+    <q-img alt="Fondo" src="../../assets/1234.jpg" style="width: 100%; height: 100%; margin: 0; opacity: 0.8 !important"/>
+
     <!-- tabla dinamica  -->
     <q-table
+    style="position: absolute; top: 2%; width:95%; opacity: 0.9; border: solid 1px #ff846a !important"
        title="Clientes"
        :rows="clientes"
        :columns="columns"
@@ -54,7 +57,7 @@
       >
        <div class="row">
               <div class="col q-px-sm">
-                  <q-input v-model="cedulaCliente" label="Cedula" />
+                  <q-input v-model="cedulaCliente" label="Cedula" disable/>
               </div>
               <div class="col q-px-sm">
                   <q-input  v-model="direccionCliente" label="Dirección" />
@@ -76,7 +79,7 @@
      </q-card-section>
      <q-card-actions align="right">
        <q-btn flat label="Cancel" color="primary" v-close-popup />
-       <q-btn flat label="Guardar Cambios" @click="deleteRow()" color="primary" v-close-popup />
+       <q-btn flat label="Guardar Cambios" @click="onSubmit()" color="primary" v-close-popup />
      </q-card-actions>
    </q-card>
  </q-dialog>
@@ -99,6 +102,11 @@ export default defineComponent({
      confirm: ref(false),
        confirmEdit: ref(false),
        filter: '',// se usa para tener lo que el usuario busca en el seach de la tabla
+       cedulaCliente:"",
+       direccionCliente:"",
+       emailCliente:"",
+       nombreCliente:"",
+       telefonoCliente:"",
      columns: [
        {name: "cedulaCliente", label: "Cedula", field: "cedulaCliente", sortable: true},
         {name: "direccionCliente", label: "Dirección", field: "direccionCliente"},
@@ -124,19 +132,44 @@ methods:{
   },
   displayEditDialog(props){// muestra o culpa el dialog tambien pasa información del objeto
     this.confirmEdit = true
-    this.eliminar = props
+    this.confirm = props
+    this.cedulaCliente = this.confirm.row.cedulaCliente  // a la propiedad cedulaUsuario que se creo en la data se le pasa la cedulaCliente que se guardo en el confirm al momento de darle al boton de editar de ese registro
+    this.direccionCliente = this.confirm.row.direccionCliente
+    this.emailCliente = this.confirm.row.emailCliente
+    this.nombreCliente = this.confirm.row.nombreCliente
+    this.telefonoCliente = this.confirm.row.telefonoCliente
+
   },
   deleteRow() { // elimina cliente
     const index = this.clientes.indexOf(this.eliminar.row);
       api.delete("/eliminarClientes?cedula=" + this.eliminar.row.cedulaCliente)
-          .then(response => response.data)
+          .then(response => {
+              this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
+          })
           .catch(e => {
-            console.log(e);
+             this.triggerPositive ("No fue posible completar la operación!", 'negative')
           });
       //this.loadUsers();
       this.clientes.splice(index, 1);// borra cliente de la tabla ya que se elimino tambien del back pero la tabla no lo sabe
 
 
+    },
+  async  onSubmit(){ // evento que se usa desde el formulario de edicion
+              await  api.post('/editarCliente?cedulaCliente='+this.cedulaCliente+'&direccionCliente='+this.direccionCliente+'&emailCliente='+this.emailCliente+'&nombreCliente='+this.nombreCliente+'&telefonoCliente='+this.telefonoCliente).then(response => {
+                    console.log(response)
+                    this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
+                }).catch(e => {
+                   console.log(e);
+                     this.triggerPositive ("No fue posible completar la operación!", 'negative') //llamada a notify para mostrar notificacion en caso de error
+                });
+                this.loadUsers(); // se llama de nuevo la funcion que trae los usuarios para llenar la tabla asi se ve el cambio
+          },
+          triggerPositive (mensaje, color) {// funcion notify
+     this.$q.notify({
+        color: color,
+        message: mensaje,
+         position: 'bottom-right',
+      })
     },
 },
 created(){// ejecuta codigo en una fase temprana de inicialización de la pagina

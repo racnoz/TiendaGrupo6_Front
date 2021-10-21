@@ -39,6 +39,8 @@
       <q-list>
         <q-item-label
           header
+          class="text-center" style="color: #366382
+       !important; font-size: 16px !important; letter-spacing: 1px !important"
         >
           Menu
         </q-item-label>
