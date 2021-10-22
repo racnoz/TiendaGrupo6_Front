@@ -141,7 +141,7 @@ methods:{
   },
   deleteRow() { // elimina proveedor
     const index = this.proveedores.indexOf(this.eliminar.row);
-      api.delete("/eliminarProveedor?nit=" + this.eliminar.row.nitProveedor)
+      api.delete("/eliminarProveedores?nit=" + this.eliminar.row.nitProveedor)
           .then(response => {
             this.triggerPositive (response.data, 'primary') //llamada a notify para mostrar notificacion en caso de succes
         })

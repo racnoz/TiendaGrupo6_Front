@@ -107,7 +107,7 @@
           </div>
         </q-card-section>
 </q-card>
-       <q-card class="q-ma-md q-pa-lg" >
+       <q-card class="q-ma-md q-pa-lg cent" >
          <q-card-title class="text-h6">
            Productos
          </q-card-title>
@@ -311,7 +311,7 @@ computed:{
      var compra = 0;
      var cantidad = this.cantidad;
      this.compra.forEach(function(elemento, indice){
-       compra += elemento["precioVenta"]*cantidad[indice];
+       compra += elemento["precioCompra"]*cantidad[indice];
      })
      return compra;
    },
@@ -319,7 +319,7 @@ computed:{
      var compra = 0;
      var cantidad = this.cantidad;
      this.compra.forEach(function(elemento, indice){
-       compra += (elemento["precioVenta"]*cantidad[indice])+(elemento["ivaCompra"]*cantidad[indice]);
+       compra += (elemento["precioVenta"]*cantidad[indice]);
      })
      return compra;
    },
@@ -327,7 +327,7 @@ computed:{
      var ivaTotal = 0;
      var cantidad = this.cantidad;
      this.compra.forEach(function(elemento, indice){
-       ivaTotal += elemento["ivaCompra"]*cantidad[indice];
+       ivaTotal += ((elemento["ivaCompra"]/100)*elemento["precioCompra"])*cantidad[indice];
      })
      return ivaTotal;
    },
@@ -348,7 +348,7 @@ mounted() {
 <style>
 
 .backImg{
-  background-image: url('~assets/index.jpg');
+  background-image: url('../../assets/index.jpg');
   background-size:cover;
  }
  .cent{

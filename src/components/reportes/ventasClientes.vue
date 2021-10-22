@@ -7,6 +7,7 @@
        :columns="columns"
        row-key="name"
         :filter="filter"
+        :table-header-style="{ fontSize: 'small' }"
      >
      <template v-slot:body-cell-actions="props">
          <q-td :props="props">
@@ -109,15 +110,16 @@ export default defineComponent({
      confirm: ref(false),
        confirmEdit: ref(false),
        filter: '',// se usa para tener lo que el usuario busca en el seach de la tabla
-       totalVentas: ref(null)
-     // columns: [
-     //   {name: "cedulaCliente", label: "Cedula", field: "cedulaCliente", sortable: true},
-     //    {name: "direccionCliente", label: "Dirección", field: "direccionCliente"},
-     //    {name: "emailCliente", label: "Correo", field: "emailCliente"},
-     //    {name: "nombreCliente", label: "Nombre", field: "nombreCliente"},
-     //    {name: "telefonoCliente", label: "Telefono", field: "telefonoCliente"},
-     //    {name: 'actions', label: 'Acciones', field: '', align: 'center'},
-     // ]
+       totalVentas: ref(null),
+     columns: [
+       {name: "codigoVenta", label: "Codigo Venta", field: "codigoVenta", sortable: true},
+        {name: "cedulaCliente", label: "Cedula Cliente", field: "cedulaCliente"},
+        {name: "cedulaUsuario", label: "Cedula Usuario", field: "cedulaUsuario"},
+        {name: "ivaVenta", label: "IVA Venta", field: "ivaVenta"},
+        {name: "totalVenta", label: "Total sin IVA", field: "totalVenta"},
+        {name: "valorVenta", label: "Total Venta", field: "valorVenta"},
+      //  {name: 'actions', label: 'Acciones', field: '', align: 'center'},
+     ]
    }
 },
 methods:{

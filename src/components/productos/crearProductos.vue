@@ -16,8 +16,18 @@
                <q-input  v-model="nitProveedor" label="Nit Proveedor" :rules="[ val => val && val.length > 0 || 'Ingrese el Nit Proveedor.']"/>
            </div>
            <div class="col q-px-sm">
-               <q-input v-model="ivaCompra" label="Iva Compra" :rules="[ val => val && val.length > 0 || 'Ingrese Iva Compra.']"/>
+                   <q-input v-model="ivaCompra"
+                    :dense="dense"
+                    :rules="[ val => val && val.length > 0 || 'Ingrese Iva Compra.']"
+                    >
+        <template v-slot:append>
+          <q-avatar size="16px" square>
+            <img src="../../assets/porcentaje.png" style="width:80px">
+          </q-avatar>
+        </template>
+      </q-input>
            </div>
+
  </div>
  <div class="row">
 
@@ -25,10 +35,10 @@
                <q-input v-model="nombreProducto" label="Nombre Producto" :rules="[ val => val && val.length > 0 || 'Ingrese Nombre Producto.']"/>
            </div>
            <div class="col q-px-sm">
-               <q-input v-model="precioCompra" label="Precio Compra" :rules="[ val => val && val.length > 0 || 'Precio Compra.']"/>
+               <q-input v-model="precioCompra" @change="calcularPrecioVenta" label="Precio Compra" :rules="[ val => val && val.length > 0 || 'Precio Compra.']"/>
            </div>
            <div class="col q-px-sm">
-               <q-input v-model="precioVenta" label="Precio Venta" :rules="[ val => val && val.length > 0 || 'Precio Venta.']"/>
+               <q-input v-model="precioVenta" readonly label="Precio Venta" />
            </div>
  </div>
  <q-separator />
@@ -54,12 +64,12 @@ export default defineComponent({
        ivaCompra : "",
        nombreProducto : "",
       precioCompra : "",
-        precioVenta: ""
+        precioVenta: ''
    }
 },
 methods:{
 onSubmit(n){
-            api.post('/registrarProveedor?nitProveedor='+this.nitProveedor+'&nombreProveedor='+this.nombreProveedor+'&ciudadProveedor='+this.ciudadProveedor+'&direccionProveedor='+this.direccionProveedor+'&telefonoProveedor='+this.telefonoProveedor).then(response => {
+            api.post('/registrarProducto?codigoProducto='+this.codigoProducto+'&ivaCompra='+this.ivaCompra+'&nitProveedor='+this.nitProveedor+'&nombreProducto='+this.nombreProducto+'&precioCompra='+this.precioCompra+'&precioVenta='+this.precioVenta).then(response => {
                   console.log(response)
                   this.triggerPositive (response.data, 'primary')
               }).catch(e => {
@@ -71,7 +81,7 @@ onSubmit(n){
               this.ivaCompra = ' ';
               this.nombreProducto = ' ';
               this.precioCompra = ' ';
-                  this.precioVenta = ' ';
+                this.precioVenta = ' ';
         },
         triggerPositive (mensaje, color) {
            this.$q.notify({
@@ -81,7 +91,10 @@ onSubmit(n){
             })
           },
 },
-created(){
+computed:{
+calcularPrecioVenta(){
+    this.precioVenta = ((this.ivaCompra/100)+1)*this.precioCompra
+  }
 }
 
 })
