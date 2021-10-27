@@ -348,7 +348,7 @@ mounted() {
 <style>
 
 .backImg{
-  background-image: url('../../assets/Index.jpg');
+  background-image: url('../../assets/Index2.jpg');
   background-size:cover;
  }
  .cent{
